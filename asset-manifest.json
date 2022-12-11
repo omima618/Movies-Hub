@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/movies-hub/static/css/main.c60e1a6f.css",
+    "main.js": "/movies-hub/static/js/main.6ff21f77.js",
+    "static/js/787.2b35ebb1.chunk.js": "/movies-hub/static/js/787.2b35ebb1.chunk.js",
+    "static/media/hero-bg.jpg": "/movies-hub/static/media/hero-bg.0f27290fdc13f04764f3.jpg",
+    "static/media/defaultPic.jpg": "/movies-hub/static/media/defaultPic.c4472158413bae26ceb9.jpg",
+    "static/media/no-items.png": "/movies-hub/static/media/no-items.65c7575173c9623ab315.png",
+    "index.html": "/movies-hub/index.html",
+    "main.c60e1a6f.css.map": "/movies-hub/static/css/main.c60e1a6f.css.map",
+    "main.6ff21f77.js.map": "/movies-hub/static/js/main.6ff21f77.js.map",
+    "787.2b35ebb1.chunk.js.map": "/movies-hub/static/js/787.2b35ebb1.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c60e1a6f.css",
+    "static/js/main.6ff21f77.js"
+  ]
+}
