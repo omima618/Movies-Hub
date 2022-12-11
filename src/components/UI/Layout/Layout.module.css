@@ -1,0 +1,12 @@
+.custom-container {
+    width: 95%;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+@media (max-width: 768px) {
+    .custom-container {
+        width: 100%;
+    }
+}

@@ -1,8 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
-
+import favoriteReducer from './features/favoriteSlice';
+import uiReducer from './features/uiSlice';
+import movieReducer from './features/movieSlice';
 export const store = configureStore({
-  reducer: {
-    counter: counterReducer,
-  },
+    reducer: {
+        favorite: favoriteReducer,
+        ui: uiReducer,
+        movies: movieReducer,
+    },
 });

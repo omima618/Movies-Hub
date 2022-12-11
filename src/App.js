@@ -1,58 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
-}
+// PAGES
+import Home from './pages/Home';
+import List from './pages/List';
+import MovieDetails from './pages/MovieDetails';
+import TVShowDetails from './pages/TVShowDetails';
+import PersonDetails from './pages/PersonDetails';
+import Favorites from './pages/Favorites';
+import NotFound from './pages/NotFound';
+
+// COMPONENTS
+import Header from './components/Shared/Header';
+import Footer from './components/Shared/Footer';
+import ScrollToTop from './components/Buttons/ScrollToTop';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const App = () => {
+    return (
+        <>
+            <Router>
+                <Header />
+                <main>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/movies-hub" element={<Home />} />
+                        <Route path="/list/:type" element={<List />} />
+                        <Route
+                            path="/movie-details"
+                            element={<MovieDetails />}
+                        />
+                        <Route
+                            path="/tvshow-details"
+                            element={<TVShowDetails />}
+                        />
+                        <Route
+                            path="/person-details"
+                            element={<PersonDetails />}
+                        />
+                        <Route path="/favorites" element={<Favorites />} />
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </main>
+                <ScrollToTop />
+                <ToastContainer autoClose={3000} theme="colored" />
+                <Footer />
+            </Router>
+        </>
+    );
+};
 
 export default App;
