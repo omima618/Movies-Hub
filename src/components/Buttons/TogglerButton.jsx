@@ -20,7 +20,6 @@ const TogglerButton = (props) => {
     };
 
     useEffect(() => {
-        console.log(type);
         if (!activeBtn) setActiveBtn(opt1);
         if (type === 'trending') {
             activeBtn === 'Today' && sendRequest(type, 'day');

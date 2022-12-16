@@ -16,12 +16,9 @@ const initialState = {
 // GET POPULAR
 const getPopular = createAsyncThunk(
     'movies/getPopular',
-    async ({opt, pageNum = 1}, thunkAPI) => {
+    async ({ opt, pageNum = 1 }, thunkAPI) => {
         try {
-            console.log(pageNum);
             const { data } = await tmdb(pageNum).get(`${opt}/popular`);
-            console.log(data);
-            console.log(data.results);
             return data.results;
         } catch (error) {
             const message = error.message;
@@ -33,7 +30,7 @@ const getPopular = createAsyncThunk(
 // GET TRENDING
 const getTrending = createAsyncThunk(
     'movies/getTrending',
-    async ({time, page = 1}, thunkAPI) => {
+    async ({ time, page = 1 }, thunkAPI) => {
         try {
             const { data } = await tmdb(page).get(`trending/movie/${time}`);
             return data.results;
@@ -47,7 +44,7 @@ const getTrending = createAsyncThunk(
 // GET TOP RATED
 const getTopRated = createAsyncThunk(
     'movies/getTopRated',
-    async ({opt, page = 1}, thunkAPI) => {
+    async ({ opt, page = 1 }, thunkAPI) => {
         try {
             const { data } = await tmdb(page).get(`${opt}/top_rated`);
             return data.results;

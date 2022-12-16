@@ -2,13 +2,14 @@ import defaultPic from '../../assets/defaultPic.jpg';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { favoriteActions } from '../../app/features/favoriteSlice';
 import { toast } from 'react-toastify';
 const MovieCard = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [cardData, setCardData] = useState(null);
+    const [fav, setFav] = useState(false);
 
     // FORMAT RATE
     const countRate = (average) => {
@@ -16,7 +17,9 @@ const MovieCard = (props) => {
     };
 
     // HANDLE FAVORITES
-    const [fav, setFav] = useState(false);
+    const isFav = [...useSelector((state) => state.favorite.favorites)].some(
+        (item) => item.id === props.data.id
+    );
     const addToFav = () => {
         setFav(true);
         dispatch(favoriteActions.addToFav(cardData));
@@ -29,6 +32,7 @@ const MovieCard = (props) => {
     };
     useEffect(() => {
         setCardData(props.data);
+        isFav && setFav(true);
     }, [props]);
     return (
         cardData && (
