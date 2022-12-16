@@ -6,6 +6,7 @@ const TogglerButton = (props) => {
     const { opt1, opt2 } = props.options;
     const type = props.section;
     const [activeBtn, setActiveBtn] = useState('');
+
     // GET DATA
     const sendRequest = (type, activeOpt) => {
         type === 'popular' &&
@@ -17,6 +18,9 @@ const TogglerButton = (props) => {
         type === 'top-rated' &&
             dispatch(movieActions.resetTopRated()) &&
             dispatch(requests.getTopRated({ opt: activeOpt }));
+        type === 'trailer' &&
+            // dispatch(movieActions.resetTopRated()) &&
+            dispatch(requests.getIDS({ opt: activeOpt }));
     };
 
     useEffect(() => {

@@ -4,8 +4,30 @@ import ToggolerButton from '../../Buttons/TogglerButton';
 import HorizontalSlider from '../HorizontalSlider';
 import MovieCard from '../../Cards/MovieCard';
 import TrailerCard from '../../Cards/TrailerCard';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { requests, movieActions } from '../../../app/features/movieSlice';
 const HomeSection = (props) => {
-    const { title, options, data: MoviesData, section: sectionType } = props;
+    const dispatch = useDispatch();
+    const { title, options, data: moviesData, section: sectionType } = props;
+    const { trailers } = useSelector((state) => state.movies);
+    useEffect(() => {
+        if (
+            sectionType &&
+            sectionType === 'trailer' &&
+            moviesData.keys.length > 0
+        ) {
+            dispatch(movieActions.resetTrailers());
+            moviesData.keys.forEach((key) => {
+                dispatch(
+                    requests.getTrailer({
+                        id: key,
+                        opt: moviesData.opt,
+                    })
+                );
+            });
+        }
+    }, [moviesData]);
     return (
         <section className="py-5 md:py-10">
             <Layout>
@@ -13,19 +35,17 @@ const HomeSection = (props) => {
                     <Heading title={title} />
                     <ToggolerButton options={options} section={sectionType} />
                 </div>
-                {MoviesData && (
+                {moviesData && (
                     <HorizontalSlider>
                         {/* RENDER TRAILERS CARDS */}
                         {title === 'Latest Trailers' &&
-                            MoviesData.map((movieData) => (
-                                <TrailerCard
-                                    key={movieData.id}
-                                    data={movieData}
-                                />
+                            trailers.length > 0 &&
+                            trailers.map((trailerId) => (
+                                <TrailerCard key={trailerId} data={trailerId} />
                             ))}
                         {/* RENDER MOVIES CARDS */}
                         {title !== 'Latest Trailers' &&
-                            MoviesData.map((movieData) => (
+                            moviesData.map((movieData) => (
                                 <MovieCard
                                     key={movieData.id}
                                     data={movieData}

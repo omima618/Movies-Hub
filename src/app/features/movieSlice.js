@@ -6,7 +6,8 @@ const initialState = {
     popular: [],
     topRated: [],
     trending: [],
-    moviesTrailer: [],
+    ids: { opt: '', keys: [] },
+    trailers: [],
     isLoading: false,
     isSuccess: false,
     isError: false,
@@ -30,9 +31,9 @@ const getPopular = createAsyncThunk(
 // GET TRENDING
 const getTrending = createAsyncThunk(
     'movies/getTrending',
-    async ({ time, page = 1 }, thunkAPI) => {
+    async ({ time, pageNum = 1 }, thunkAPI) => {
         try {
-            const { data } = await tmdb(page).get(`trending/movie/${time}`);
+            const { data } = await tmdb(pageNum).get(`trending/movie/${time}`);
             return data.results;
         } catch (error) {
             const message = error.message;
@@ -44,10 +45,44 @@ const getTrending = createAsyncThunk(
 // GET TOP RATED
 const getTopRated = createAsyncThunk(
     'movies/getTopRated',
-    async ({ opt, page = 1 }, thunkAPI) => {
+    async ({ opt, pageNum = 1 }, thunkAPI) => {
         try {
-            const { data } = await tmdb(page).get(`${opt}/top_rated`);
+            const { data } = await tmdb(pageNum).get(`${opt}/top_rated`);
             return data.results;
+        } catch (error) {
+            const message = error.message;
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
+// GET IDS
+const getIDS = createAsyncThunk(
+    'movies/getIDs',
+    async ({ opt, pageNum = 1 }, thunkAPI) => {
+        try {
+            const { data } = await tmdb(pageNum).get(
+                `${opt}/${opt === 'tv' ? 'top_rated' : 'popular'}`
+            );
+            const itmesID = [];
+            data.results.forEach((item) => {
+                itmesID.push(item.id);
+            });
+            return { opt, keys: itmesID };
+        } catch (error) {
+            const message = error.message;
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
+// GET TRAILERS
+const getTrailer = createAsyncThunk(
+    'movies/getTrailer',
+    async ({ id, opt }, thunkAPI) => {
+        try {
+            const { data } = await tmdb().get(`${opt}/${id}/videos`);
+            return data.results[0].key;
         } catch (error) {
             const message = error.message;
             return thunkAPI.rejectWithValue(message);
@@ -70,6 +105,10 @@ const movieSlice = createSlice({
         resetTopRated: (state) => {
             state.isLoading = true;
             state.topRated = [];
+        },
+        resetTrailers: (state) => {
+            state.isLoading = true;
+            state.trailers = [];
         },
     },
     extraReducers: (builder) => {
@@ -112,11 +151,46 @@ const movieSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
+            })
+            .addCase(getIDS.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getIDS.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.ids = {
+                    opt: action.payload.opt,
+                    keys: action.payload.keys,
+                };
+            })
+            .addCase(getIDS.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            .addCase(getTrailer.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getTrailer.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.trailers.push(action.payload);
+            })
+            .addCase(getTrailer.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
             });
     },
 });
 
-export const requests = { getPopular, getTopRated, getTrending };
+export const requests = {
+    getPopular,
+    getTopRated,
+    getTrending,
+    getIDS,
+    getTrailer,
+};
 
 export const movieActions = movieSlice.actions;
 

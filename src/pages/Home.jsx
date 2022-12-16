@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Hero from '../components/Hero/Hero';
 import HomeSection from '../components/UI/Sections/HomeSection';
 const Home = () => {
-    const { popular, topRated, trending, moviesTrailer } = useSelector(
+    const { popular, topRated, trending, ids } = useSelector(
         (state) => state.movies
     );
     return (
@@ -22,8 +22,9 @@ const Home = () => {
             />
             {/* <HomeSection
                 title="Latest Trailers"
+                section="trailer"
                 options={{ opt1: 'Movies', opt2: 'TV' }}
-                data={moviesTrailer}
+                data={ids}
             /> */}
             <HomeSection
                 title="Trending"
