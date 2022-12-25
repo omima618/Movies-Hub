@@ -1,12 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { uiActions } from '../../app/features/uiSlice';
 import { RiMovie2Line } from 'react-icons/ri';
+import { FiSearch } from 'react-icons/fi';
 import Layout from '../UI/Layout/Layout';
 const Header = () => {
     const dispatch = useDispatch();
     const { theme } = useSelector((state) => state.ui);
+    const [showSearchBar, setShowSearchBar] = useState(false);
+    const [showDropdown, setShowDropdown] = useState(false);
     // THEME HANDLER
     const toggleTheme = (theme) => {
         dispatch(uiActions.changeTheme(theme));
@@ -20,7 +23,7 @@ const Header = () => {
         <button
             className="btn btn-ghost btn-circle"
             onClick={() => {
-                toggleTheme('light');
+                toggleTheme('night');
             }}
         >
             <svg
@@ -36,7 +39,7 @@ const Header = () => {
         <button
             className="btn btn-ghost btn-circle"
             onClick={() => {
-                toggleTheme('night');
+                toggleTheme('light');
             }}
         >
             <svg
@@ -55,7 +58,15 @@ const Header = () => {
                 <div className="navbar p-0 m-0">
                     <div className="navbar-start">
                         <div className="dropdown">
-                            <label tabIndex={0} className="cursor-pointer">
+                            <label
+                                tabIndex={0}
+                                className="cursor-pointer"
+                                onClick={() => {
+                                    setShowDropdown((prev) => {
+                                        return !prev;
+                                    });
+                                }}
+                            >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     className="h-6 w-6"
@@ -74,34 +85,78 @@ const Header = () => {
                             {/* DROPDOWN */}
                             <ul
                                 tabIndex={0}
-                                className="menu menu-compact dropdown-content mt-3 p-3 shadow shadow-gray-400 bg-base-100 rounded-box w-52"
+                                className={`
+                                ${showDropdown ? 'block' : 'hidden'}
+                                menu dropdown-content z-50 mt-3 p-3 shadow shadow-gray-400 bg-base-100 rounded-box w-52`}
                             >
-                                <li className="cursor-pointer mb-3 rounded-md">
+                                <li
+                                    className="cursor-pointer mb-3 rounded-md"
+                                    onClick={() => {
+                                        setShowDropdown((prev) => {
+                                            return !prev;
+                                        });
+                                    }}
+                                >
                                     <Link className="text-lg" to="/">
                                         Home
                                     </Link>
                                 </li>
-                                <li className="cursor-pointer mb-3 rounded-md">
+                                <li
+                                    className="cursor-pointer mb-3 rounded-md"
+                                    onClick={() => {
+                                        setShowDropdown((prev) => {
+                                            return !prev;
+                                        });
+                                    }}
+                                >
                                     <Link className="text-lg" to="/">
                                         Categories
                                     </Link>
                                 </li>
-                                <li className="cursor-pointer mb-3 rounded-md">
+                                <li
+                                    className="cursor-pointer mb-3 rounded-md"
+                                    onClick={() => {
+                                        setShowDropdown((prev) => {
+                                            return !prev;
+                                        });
+                                    }}
+                                >
                                     <Link className="text-lg" to="/list/movie">
                                         Movies
                                     </Link>
                                 </li>
-                                <li className="cursor-pointer mb-3 rounded-md">
+                                <li
+                                    className="cursor-pointer mb-3 rounded-md"
+                                    onClick={() => {
+                                        setShowDropdown((prev) => {
+                                            return !prev;
+                                        });
+                                    }}
+                                >
                                     <Link className="text-lg" to="/list/tv">
                                         TV Show
                                     </Link>
                                 </li>
-                                <li className="cursor-pointer mb-3 rounded-md">
+                                <li
+                                    className="cursor-pointer mb-3 rounded-md"
+                                    onClick={() => {
+                                        setShowDropdown((prev) => {
+                                            return !prev;
+                                        });
+                                    }}
+                                >
                                     <Link className="text-lg" to="/list/person">
                                         People
                                     </Link>
                                 </li>
-                                <li className="cursor-pointer rounded-md">
+                                <li
+                                    className="cursor-pointer rounded-md"
+                                    onClick={() => {
+                                        setShowDropdown((prev) => {
+                                            return !prev;
+                                        });
+                                    }}
+                                >
                                     <Link className="text-lg" to="/favorites">
                                         Favorites
                                     </Link>
@@ -119,7 +174,14 @@ const Header = () => {
                     </div>
                     <div className="navbar-end">
                         {/* SEARCH */}
-                        <button className="btn btn-ghost btn-circle">
+                        <button
+                            className="btn btn-ghost btn-circle"
+                            onClick={() => {
+                                setShowSearchBar((prev) => {
+                                    return !prev;
+                                });
+                            }}
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-6 w-6"
@@ -135,9 +197,25 @@ const Header = () => {
                                 />
                             </svg>
                         </button>
-                        {theme === 'night' ? DarkIcon : LightIcon}
+                        {theme === 'night' ? LightIcon : DarkIcon}
                     </div>
                 </div>
+                {/* SEARCH BAR  */}
+                {showSearchBar && (
+                    <div className=" w-full mx-auto mb-5 relative transition transition-500">
+                        <input
+                            type="text"
+                            placeholder="Search for a movie, TV Show, or a person..."
+                            className="input input-bordered input-primary rounded-3xl text-gray-500 block w-full placeholder:text-sm"
+                        />
+                        <button
+                            className="btn btn-primary absolute right-0 top-0 rounded-3xl"
+                            title="search"
+                        >
+                            <FiSearch className="text-lg" />
+                        </button>
+                    </div>
+                )}
             </Layout>
         </nav>
     );

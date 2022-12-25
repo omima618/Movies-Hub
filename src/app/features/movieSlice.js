@@ -6,6 +6,8 @@ const initialState = {
     popular: [],
     topRated: [],
     trending: [],
+    movie: null,
+    cast: null,
     ids: { opt: '', keys: [] },
     trailers: [],
     isLoading: false,
@@ -90,25 +92,48 @@ const getTrailer = createAsyncThunk(
     }
 );
 
+// GET MOVIE DETAILS
+const getMovieDetails = createAsyncThunk(
+    'movies/getMovie',
+    async ({ id, opt }, thunkAPI) => {
+        try {
+            const { data } = await tmdb().get(`${opt}/${id}`);
+            const cast = await tmdb().get(`${opt}/${id}/credits`);
+            console.log(data);
+            console.log(cast.data);
+            return { movieDate: data, castData: cast.data };
+        } catch (error) {
+            const message = error.message;
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
+
 const movieSlice = createSlice({
     name: 'movies',
     initialState,
     reducers: {
         resetPopular: (state) => {
-            state.isLoading = true;
+            state.isLoading = false;
             state.popular = [];
         },
         resetTrending: (state) => {
-            state.isLoading = true;
+            state.isLoading = false;
             state.trending = [];
         },
         resetTopRated: (state) => {
-            state.isLoading = true;
+            state.isLoading = false;
             state.topRated = [];
         },
         resetTrailers: (state) => {
-            state.isLoading = true;
+            state.isLoading = false;
             state.trailers = [];
+        },
+        resetMovie: (state) => {
+            state.isLoading = false;
+            state.movie = null;
+            state.cast = null;
         },
     },
     extraReducers: (builder) => {
@@ -180,6 +205,20 @@ const movieSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
+            })
+            .addCase(getMovieDetails.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getMovieDetails.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.movie = action.payload.movieDate;
+                state.cast = action.payload.castData;
+            })
+            .addCase(getMovieDetails.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
             });
     },
 });
@@ -190,6 +229,7 @@ export const requests = {
     getTrending,
     getIDS,
     getTrailer,
+    getMovieDetails,
 };
 
 export const movieActions = movieSlice.actions;

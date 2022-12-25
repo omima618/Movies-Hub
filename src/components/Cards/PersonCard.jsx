@@ -7,7 +7,7 @@ const PersonCard = (props) => {
     }, [props]);
     return (
         cardData && (
-            <div className="card w-36 md:w-48 h-full bg-base border-0 mr-3 sm:mr-5 shrink-0 relative">
+            <div className="card w-32 md:w-40 h-full bg-base border-0 mr-3 sm:mr-5 shrink-0 relative">
                 <figure className="mb-2">
                     <img
                         // onClick={() => {
@@ -31,9 +31,14 @@ const PersonCard = (props) => {
                     >
                         {cardData.name}
                     </h3>
-                    <p className="text-sm text-gray-500">
-                        {cardData.known_for_department}
-                    </p>
+                    {cardData.character && (
+                        <span className="opacity-70 text-sm">{cardData.character}</span>
+                    )}
+                    {!cardData.character && (
+                        <p className="text-sm text-gray-500">
+                            {cardData.known_for_department}
+                        </p>
+                    )}
                 </div>
             </div>
         )

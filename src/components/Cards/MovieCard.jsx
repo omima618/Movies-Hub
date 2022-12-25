@@ -1,38 +1,13 @@
 import defaultPic from '../../assets/defaultPic.jpg';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
-import { useDispatch, useSelector } from 'react-redux';
-import { favoriteActions } from '../../app/features/favoriteSlice';
-import { toast } from 'react-toastify';
+import Rate from './Rate';
+import FavButton from '../Buttons/FavButton';
 const MovieCard = (props) => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [cardData, setCardData] = useState(null);
-    const [fav, setFav] = useState(false);
-
-    // FORMAT RATE
-    const countRate = (average) => {
-        return Math.trunc(average * 10);
-    };
-
-    // HANDLE FAVORITES
-    const isFav = [...useSelector((state) => state.favorite.favorites)].some(
-        (item) => item.id === props.data.id
-    );
-    const addToFav = () => {
-        setFav(true);
-        dispatch(favoriteActions.addToFav(cardData));
-        toast.success('Successfully added to favorites');
-    };
-    const removeFromFav = () => {
-        setFav(false);
-        dispatch(favoriteActions.removeFromFav(cardData.id));
-        toast.error('Item removed successfully!');
-    };
     useEffect(() => {
         setCardData(props.data);
-        isFav && setFav(true);
     }, [props]);
     return (
         cardData && (
@@ -40,7 +15,7 @@ const MovieCard = (props) => {
                 <figure className="mb-2">
                     <img
                         onClick={() => {
-                            navigate('/movie-details');
+                            navigate(`/movie-details/${cardData.id}`);
                         }}
                         src={
                             cardData.poster_path
@@ -54,7 +29,7 @@ const MovieCard = (props) => {
                 <div className="card-body px-2 py-4">
                     <h3
                         onClick={() => {
-                            navigate('/movie-details');
+                            navigate(`/movie-details/${cardData.id}`);
                         }}
                         className="card-title text-sm md:text-lg cursor-pointer"
                     >
@@ -65,39 +40,12 @@ const MovieCard = (props) => {
                     </p>
                 </div>
                 {/* RATE */}
-                <div
-                    className={`${
-                        countRate(cardData.vote_average) >= 50 &&
-                        countRate(cardData.vote_average) < 65 &&
-                        'text-yellow-500'
-                    } ${
-                        countRate(cardData.vote_average) >= 65 &&
-                        'text-green-500'
-                    } ${
-                        countRate(cardData.vote_average) < 50 && 'text-red-700'
-                    } radial-progress text-xs font-bold bg-base-300 border-2 border-base-300 absolute top-[165px] left-2`}
-                    style={{
-                        '--value': countRate(cardData.vote_average),
-                        '--size': '42px',
-                        '--thickness': '3px',
-                    }}
-                >
-                    {countRate(cardData.vote_average)}%
-                </div>
+                <Rate
+                    average={cardData.vote_average}
+                    classes="absolute top-[165px] left-2"
+                />
                 {/* ADD TO FAV */}
-                {fav ? (
-                    <AiFillHeart
-                        onClick={removeFromFav}
-                        title="Remove from favorites"
-                        className="text-red-700 text-2xl cursor-pointer absolute right-2 top-2"
-                    />
-                ) : (
-                    <AiOutlineHeart
-                        onClick={addToFav}
-                        title="Add to favorites"
-                        className="text-red-700 text-2xl cursor-pointer absolute right-2 top-2"
-                    />
-                )}
+                <FavButton classes="absolute right-2 top-2" data={cardData} />
             </div>
         )
     );

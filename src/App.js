@@ -27,7 +27,7 @@ const App = () => {
                         <Route path="/movies-hub" element={<Home />} />
                         <Route path="/list/:type" element={<List />} />
                         <Route
-                            path="/movie-details"
+                            path="/movie-details/:id"
                             element={<MovieDetails />}
                         />
                         <Route

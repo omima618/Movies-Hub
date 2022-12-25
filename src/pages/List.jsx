@@ -66,7 +66,7 @@ const List = () => {
                 </div>
                 {popular.length > 0 && (
                     <div className="py-10">
-                        <div className="flex justify-between items-start flex-wrap mb-3">
+                        <div className="flex gap-8 items-start flex-wrap mb-3">
                             {popular.map((item) =>
                                 reqType === 'person' ? (
                                     <PersonCard key={item.id} data={item} />
